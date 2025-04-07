@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: background-config
+  namespace: final
+data:
+  S3_BUCKET: "pratima-clo835-background"
+  S3_KEY: "background.jpg"
+  HEADER_TEXT: "Exam given by: pratima (1513236)"
