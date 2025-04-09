@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysql
   namespace: final
 spec:
   replicas: 1
@@ -14,33 +14,25 @@ spec:
         app: mysql
     spec:
       containers:
-        - name: mysql
-<<<<<<< HEAD
-          image: "788814499739.dkr.ecr.us-east-1.amazonaws.com/flask-mysql-ecr:mysql-v1"
-          envFrom:
-            - secretRef:
-                name: mysql-secret
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: mysql-storage
-      volumes:
+      - name: mysql
+        image: 788814499739.dkr.ecr.us-east-1.amazonaws.com/flask-mysql-ecr:mysql-v1
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DBPWD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DATABASE
+        volumeMounts:
         - name: mysql-storage
-          persistentVolumeClaim:
-            claimName: mysql-pvc
-=======
-          # Use the 'mysql-v1' tag here
-          image: "491245135109.dkr.ecr.us-east-1.amazonaws.com/flask-mysql-ecr:mysql-v1"
-          env:
-          env:
-            - name: MYSQL_ALLOW_EMPTY_PASSWORD
-              value: "true"
-
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: mysql-storage
-
+          mountPath: /var/lib/mysql
       volumes:
-        - name: mysql-storage
-          persistentVolumeClaim:
-            claimName: mysql-pvc
->>>>>>> cc31bb1 (updated all the manifests files)
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
